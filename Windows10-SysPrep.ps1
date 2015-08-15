@@ -6,27 +6,18 @@ Set-Service -Name dmwappushservice -StartupType disabled
 ## Remove OneDrive 
 taskkill /f /im OneDrive.exe
 & $env:SystemRoot\SysWOW64\OneDriveSetup.exe /uninstall
-#REG Delete "HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f
 
 New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
-
 Remove-Item -Path 'HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
-#REG Delete "HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f
 Remove-Item -Path 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
 
-## Apply Group Policies
-#secedit /configure /db C:\Windows\Temp\secedit.sdb /cfg '.\GPO\GroupPolicy\Machine\secpol.inf'
-#.\LGPO-Utilities\Apply_LGPO_Delta.exe .\GPO\GroupPolicy\Machine\registry.log
-
 ## Kill access to the Windows Store
-#reg import .\GPO\GoupPolicy\Machine\DisableWindowsStore.reg
 If (-Not (Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore")) {
 	New-Item -Force -Path "HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore" | Out-Null
 }
 New-ItemProperty -Force -Path HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore -Name RemoveWindowsStore -Type DWord -Value 1
 
 ## Block connection to Microsoft Accounts
-#reg import .\GPO\GoupPolicy\Machine\NoConnected.reg
 If (-Not (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System")) {
 	New-Item -Force -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Out-Null
 }

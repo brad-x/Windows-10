@@ -5,7 +5,7 @@ Set-Service -Name dmwappushservice -StartupType disabled
 
 ## Remove OneDrive 
 taskkill /f /im OneDrive.exe
-$env:SystemRoot\SysWOW64\OneDriveSetup.exe /uninstall
+& $env:SystemRoot\SysWOW64\OneDriveSetup.exe /uninstall
 #REG Delete "HKEY_CLASSES_ROOT\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}" /f
 
 New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT

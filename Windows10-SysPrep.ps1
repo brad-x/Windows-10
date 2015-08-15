@@ -122,7 +122,7 @@ foreach ($modernApp in $modernApps) {
 
 Get-AppxPackage -AllUsers | Remove-AppxPackage
 
-#### Acquired the below from https://msdn.microsoft.com/en-us/library/windows/hardware/mt185364(v=vs.85).asp
+#### Acquired the below from https://msdn.microsoft.com/en-us/library/windows/hardware/mt185364(v=vs.85).aspx
 
 ## Get all the provisioned packages
 $Packages = (get-item 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Applications') | Get-ChildItem

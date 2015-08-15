@@ -4,6 +4,6 @@ An as complete as possible attempt to turn off the anti-privacy features of Wind
 
 This script will uninstall all of your modern apps and lock out the Windows store - to avoid this, comment out the following line: 
 
-New-ItemProperty -Force -Path HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore -Name RemoveWindowsStore -Type DWord -Value 1
+    New-ItemProperty -Force -Path HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore -Name RemoveWindowsStore -Type DWord -Value 1
 
 As well as everything below "Remove Pre-Provisioned Modern apps".

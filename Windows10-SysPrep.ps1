@@ -133,47 +133,36 @@ New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsU
 New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name ScheduledInstallTime -Type DWord -Value 3
 
 ## Remove Pre-Provisioned Modern apps, provision the ones we want
-$modernApps = @("Microsoft.Reader","Microsoft.WindowsReadingList","Microsoft.3DBuilder","microsoft.windowscommunicationsapps","Microsoft.BingFinance","Microsoft.BingNews","Microsoft.BingSports","Microsoft.BingWeather","Microsoft.BingTravel","Microsoft.BingHealthAndFitness","Microsoft.BingFoodAndDrink","Microsoft.People","Microsoft.WindowsPhone","Microsoft.MicrosoftSolitaireCollection","Microsoft.WindowsSoundRecorder","Microsoft.XboxApp","Microsoft.WindowsCamera","Microsoft.ZuneMusic","Microsoft.ZuneVideo","Microsoft.Office.OneNote","Microsoft.SkypeApp","Microsoft.MicrosoftOfficeHub")
+$modernApps = @("Microsoft.Reader"
+	"Microsoft.WindowsReadingList"
+	"Microsoft.3DBuilder"
+	"microsoft.windowscommunicationsapps"
+	"Microsoft.BingFinance"
+	"Microsoft.BingNews"
+	"Microsoft.BingSports"
+	"Microsoft.BingWeather"
+	"Microsoft.BingTravel"
+	"Microsoft.BingHealthAndFitness"
+	"Microsoft.BingFoodAndDrink"
+	"Microsoft.People"
+	"Microsoft.WindowsPhone"
+	"Microsoft.MicrosoftSolitaireCollection"
+	"Microsoft.WindowsSoundRecorder"
+	"Microsoft.XboxApp"
+	"Microsoft.WindowsCamera"
+	"Microsoft.ZuneMusic"
+	"Microsoft.ZuneVideo"
+	"Microsoft.Office.OneNote"
+	"Microsoft.SkypeApp"
+	"Microsoft.MicrosoftOfficeHub"
+)
+
 foreach ($modernApp in $modernApps) {
-    Get-AppxProvisionedPackage -Online | Where-Object {$_.PackageName -match $modernApp} | Remove-AppxProvisionedPackage -Online
+    Get-AppxProvisionedPackage -Online | 
+	Where-Object {$_.PackageName -match $modernApp} | 
+	Remove-AppxProvisionedPackage -Online
+
+    Get-AppxPackage -Name $modernApp -AllUsers | Remove-AppxPackage
 }
 
-Get-AppxPackage -AllUsers | Remove-AppxPackage
 
-#### Acquired the below from https://msdn.microsoft.com/en-us/library/windows/hardware/mt185364(v=vs.85).aspx
-
-## Get all the provisioned packages
-$Packages = (get-item 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Applications') | Get-ChildItem
-
-## Filter the list if provided a filter
-$PackageFilter = $args[0] 
-if ([string]::IsNullOrEmpty($PackageFilter))
-{
-	echo "No filter specified, attempting to re-register all provisioned apps."
-}
-else
-{
-	$Packages = $Packages | where {$_.Name -like $PackageFilter} 
-
-	if ($Packages -eq $null)
-	{
-		echo "No provisioned apps match the specified filter."
-		exit
-	}
-	else
-	{
-		echo "Registering the provisioned apps that match $PackageFilter"
-	}
-}
-
-ForEach($Package in $Packages)
-{
-	## get package name & path
-	$PackageName = $Package | Get-ItemProperty | Select-Object -ExpandProperty PSChildName
-	$PackagePath = [System.Environment]::ExpandEnvironmentVariables(($Package | Get-ItemProperty | Select-Object -ExpandProperty Path))
-
-	## register the package	
-	echo "Attempting to register package: $PackageName"
-
-	Add-AppxPackage -register $PackagePath -DisableDevelopmentMode                  
-}

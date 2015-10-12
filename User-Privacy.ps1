@@ -29,12 +29,12 @@ foreach ($key in (ls HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAcces
     if ($key.PSChildName -EQ "LooselyCoupled") {
         continue
     }
-    sp ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\" + $key.PSChildName) "Type" "InterfaceClass"
-    sp ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\" + $key.PSChildName) "Value" "Deny"
-    sp ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\" + $key.PSChildName) "InitialAppValue" "Unspecified"
+    sp (HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\ + $key.PSChildName) -Name Type -Value InterfaceClass
+    sp (HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\ + $key.PSChildName) -Name Value -Value Deny
+    sp (HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\ + $key.PSChildName) -Name InitialAppValue -Value Unspecified
 }
 
-sp "HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Permissions\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" "SensorPermissionState" 0
+sp "HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Permissions\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" SensorPermissionState 0
 
 ##########
 

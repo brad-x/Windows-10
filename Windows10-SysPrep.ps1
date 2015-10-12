@@ -141,6 +141,7 @@ New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsU
 New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name ScheduledInstallDay -Type DWord -Value 6
 New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name ScheduledInstallTime -Type DWord -Value 3
 
+# Disable the Customer Experience Improvement Program
 If (-Not (Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient"))
 {
     New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft" -Name SQMClient

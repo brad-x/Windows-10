@@ -1,7 +1,16 @@
 ## Stop / Disable intrusive diagnostics services
-net stop diagtrack
-Set-Service -Name diagtrack -StartupType disabled
-Set-Service -Name dmwappushservice -StartupType disabled
+$services = @(
+	diagtrack
+	dmwappushservice
+	Wecsvc
+	DcpSvc
+	diagnosticshub.standardcollector.service
+)
+
+foreach ($service in $services) {
+    Get-Service -Name $service | Stop-Service -Force
+    Get-Service -Name $service | Set-Service -StartupType Disabled
+}
 
 ## Remove diagnostic services
 
@@ -131,6 +140,65 @@ New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsU
 New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name AutomaticMaintenanceEnabled -Type DWord -Value 1
 New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name ScheduledInstallDay -Type DWord -Value 6
 New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name ScheduledInstallTime -Type DWord -Value 3
+
+If (-Not (Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient"))
+{
+    New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft" -Name SQMClient
+}
+If (-Not (Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows"))
+{
+    New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient" -Name Windows
+}
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows" -Name CEIPEnable -Type DWord -Value 0
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\SQMClient\Windows" -Name CEIPEnable -Type DWord -Value 0
+
+# Disable Windows Defender Cloud reporting and sample submission
+
+$definition = @"
+using System;
+using System.Runtime.InteropServices;
+namespace Win32Api
+{
+    public class NtDll
+    {
+        [DllImport("ntdll.dll", EntryPoint="RtlAdjustPrivilege")]
+        public static extern int RtlAdjustPrivilege(ulong Privilege, bool Enable, bool CurrentThread, ref bool Enabled);
+    }
+}
+"@
+ 
+        if (-not ("Win32Api.NtDll" -as [type])) 
+        {
+            Add-Type -TypeDefinition $definition -PassThru | out-null
+        }
+        else
+        {
+             ("Win32Api.NtDll" -as [type]) | Out-Null
+        }
+       
+        $bEnabled = $false
+        # Enable SeTakeOwnershipPrivilege
+        $res = [Win32Api.NtDll]::RtlAdjustPrivilege(9, $true, $false, [ref]$bEnabled)
+
+        $adminGroupSID = "S-1-5-32-544"
+
+        $adminGroupName = (get-wmiobject -class "win32_account" -namespace "root\cimv2" | where-object{$_.sidtype -eq 4 -and $_.Sid -eq "$adminGroupSID"}).Name 
+
+        $key = [Microsoft.Win32.Registry]::LocalMachine.OpenSubKey("SOFTWARE\Microsoft\Windows Defender\Spynet", [Microsoft.Win32.RegistryKeyPermissionCheck]::ReadWriteSubTree,[System.Security.AccessControl.RegistryRights]::takeownership)
+        $acl = $key.GetAccessControl()
+        $acl.SetOwner([System.Security.Principal.NTAccount]$adminGroupName)
+        $key.SetAccessControl($acl)
+
+        $rule = New-Object System.Security.AccessControl.RegistryAccessRule ("$adminGroupName","FullControl","Allow")
+        $acl.SetAccessRule($rule)
+        $key.SetAccessControl($acl)
+
+
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Spynet" -Name "SpyNetReporting" -Value 0
+        Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Defender\Spynet" -Name "SubmitSamplesConsent" -Value 0
+
+        $acl.RemoveAccessRule($rule) | Out-Null
+        $key.SetAccessControl($acl)
 
 ## Remove Pre-Provisioned Modern apps, provision the ones we want
 $modernApps = @("Microsoft.Reader"

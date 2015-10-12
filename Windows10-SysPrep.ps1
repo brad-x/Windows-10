@@ -1,10 +1,9 @@
-## Stop / Disable intrusive diagnostics services
-$services = @(
-	diagtrack
-	dmwappushservice
-	Wecsvc
-	DcpSvc
-	diagnosticshub.standardcollector.service
+﻿## Stop / Disable intrusive diagnostics services
+$services = @("diagtrack"
+	"dmwappushservice"
+	"Wecsvc"
+	"DcpSvc"
+	"diagnosticshub.standardcollector.service"
 )
 
 foreach ($service in $services) {
@@ -233,5 +232,6 @@ foreach ($modernApp in $modernApps) {
 
     Get-AppxPackage -Name $modernApp -AllUsers | Remove-AppxPackage
 }
+
 
 

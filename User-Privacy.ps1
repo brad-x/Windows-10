@@ -34,23 +34,23 @@ foreach ($key in (ls HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAcces
     sp (HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\ + $key.PSChildName) -Name InitialAppValue -Value Unspecified
 }
 
-sp "HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Permissions\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" SensorPermissionState 0
+#sp "HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Permissions\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" SensorPermissionState 0
 
 ##########
 
-$Edge = "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge"
+#$Edge = "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge"
 
 # 1 adds the Do Not Track Header, 0 does not
-Set-ItemPropery -Path "$Edge\Main" -Name DoNotTrack -Value 1
+#Set-ItemPropery -Path "$Edge\Main" -Name DoNotTrack -Value 1
 
 # 0 disables search suggestions, 1 does not
-Set-ItemProperty -Path "$Edge\User\Default\SearchScopes" -Name ShowSearchSuggestionsGlobal -Value 0
+#Set-ItemProperty -Path "$Edge\User\Default\SearchScopes" -Name ShowSearchSuggestionsGlobal -Value 0
 
 # 0 disables PagePrediction, 1 enables them
-Set-ItemProperty -Path "$Edge\FlipAhead" -Name FPEnabled -Value 0
+#Set-ItemProperty -Path "$Edge\FlipAhead" -Name FPEnabled -Value 0
 
 # 0 disables PhishingFilter, 1 enables it
-Set-ItemProperty -Path "$Edge\PhishingFilter" -Name EnabledV9 -Value 0
+#Set-ItemProperty -Path "$Edge\PhishingFilter" -Name EnabledV9 -Value 0
 
 ##########
 

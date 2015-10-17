@@ -230,3 +230,99 @@ foreach ($modernApp in $modernApps) {
 
 
 
+function add-registryKeys 
+    {
+        <#
+            .SYNOPSIS
+            Add registry keys
+            .DESCRIPTION
+            This function will add registry keys
+            .EXAMPLE
+            add-registryKeys -Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows" -Name "Windows" -Type "DWord" -Value 0
+            .EXAMPLE
+            This should be another example but instead I will state that brad-x sucks.
+            .PARAMETER Path
+            Registry path to be modified
+            .PARAMETER Name
+            Name of the registry key
+            .PARAMETER Type
+            Type of registry key
+            .Parameter Value
+            Value of the registry key
+          #>
+        [CmdletBinding(DefaultParameterSetName="")]
+        Param(
+            [Parameter(
+                    Position=0,
+                    ValueFromPipeline=$True,
+                    ValueFromPipelineByPropertyName=$True
+                    )]
+                [string[]]
+                [ValidateNotNullorEmpty]
+                [ValidatePattern("HK[L|C][R|U|M]:\\\w")]
+            $registryPath,
+
+            [Parameter(
+                    Posotion=0,
+                    ValueFromPipeline=$True,
+                    ValueFromPipelineByPropertyName=$True
+                    )]
+                [string[]]
+                [ValidateNotNullorEmpty]
+            $name,
+
+            [Parameter(
+                    Position=0,
+                    ValueFromPipeline=$True,
+                    ValueFromPipelineByPropertyName=$True
+                    )]
+                [string[]]
+                [ValidateNotNullorEmpty]
+            $type,
+
+            [Parameter(
+                    Position=0,
+                    ValueFromPipeline=$True,
+                    ValueFromPipelineByPropertyName=$True
+                    )]
+                [int[]]
+                [ValidateNotNullorEmpty]
+            $value
+        )
+
+
+        Begin
+            {
+                
+            }
+
+        Process
+            {
+                If (-Not (Test-Path $path))
+                    {
+	                    try 
+                            {
+                                New-Item -Force -Path $path | Out-Null
+                            }
+                        catch {}
+
+                        try
+                            {
+                                New-ItemProperty -Force -Path $path -Name $name -Type $type -Value $value
+                            }
+                        catch {}
+                    }
+                else
+                    {
+                        try
+                            {
+                                New-ItemProperty -Force -Path $path -Name $name -Type $type -Value $value
+                            }
+                        catch {}
+                    }
+            }
+        End
+            {
+                
+            }
+    }

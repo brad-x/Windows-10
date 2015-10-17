@@ -50,14 +50,14 @@ New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\De
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\LooselyCoupled -Name Value -Value Deny
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\LooselyCoupled -Name InitialAppValue -Value Unspecified
 
-#foreach ($key in (ls HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global)) {
-#    if ($key.PSChildName -EQ "LooselyCoupled") {
-#        continue
-#    }
-#    sp (HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\ + $key.PSChildName) -Name Type -Value InterfaceClass
-#    sp (HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\ + $key.PSChildName) -Name Value -Value Deny
-#    sp (HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\ + $key.PSChildName) -Name InitialAppValue -Value Unspecified
-#}
+foreach ($key in (ls "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global")) {
+    if ($key.PSChildName -EQ "LooselyCoupled") {
+        continue
+    }
+    Set-ItemProperty -Path ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\" + $key.PSChildName) -Name "Type" -Value "InterfaceClass"
+    Set-ItemProperty -Path ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\" + $key.PSChildName) -Name "Value" -Value "Deny"
+    Set-ItemProperty -Path ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\" + $key.PSChildName) -Name "InitialAppValue" -Value "Unspecified"
+}
 
 ##########
 

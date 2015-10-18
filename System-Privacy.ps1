@@ -11,21 +11,30 @@ foreach ($service in $services) {
     Get-Service -Name $service | Set-Service -StartupType Disabled
 }
 
-## Remove diagnostic services
+#region Remove diagnostic services
+$scheduledTasks = @{
+        "SmartScreenSpecific" = "\Microsoft\Windows\AppID";
+        "Microsoft Compatibility Appraiser" = "\Microsoft\Windows\Application Experience";
+        "ProgramDataUpdater" = "\Microsoft\Windows\Application Experience";
+        "Proxy" = "\Microsoft\Windows\Autochk";
+        "Consolidator" = "\Microsoft\Windows\Customer Experience Improvement Program";
+        "KernelCeipTask" = "\Microsoft\Windows\Customer Experience Improvement Program";
+        "UsbCeip" = "\Microsoft\Windows\Customer Experience Improvement Program";
+        "Microsoft-Windows-DiskDiagnosticDataCollector" = "\Microsoft\Windows\DiskDiagnostic";
+        "GatherNetworkInfo" = "\Microsoft\Windows\NetTrace";
+        "QueueReporting" = "\Microsoft\Windows\Windows Error Reporting";
+}
 
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\AppID" -TaskName "SmartScreenSpecific"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Application Experience" -TaskName "Microsoft Compatibility Appraiser"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Application Experience" -TaskName "ProgramDataUpdater"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Autochk" -TaskName "Proxy"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Customer Experience Improvement Program" -TaskName "Consolidator"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Customer Experience Improvement Program" -TaskName "KernelCeipTask"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Customer Experience Improvement Program" -TaskName "UsbCeip"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\DiskDiagnostic" -TaskName "Microsoft-Windows-DiskDiagnosticDataCollector"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\NetTrace" -TaskName "GatherNetworkInfo"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Windows Error Reporting" -TaskName "QueueReporting"
+foreach ($scheduledTask in $scheduledTasks.GetEnumerator())
+        {
+            Disable-ScheduledTask -TaskName $scheduledTask.name -TaskPath $scheduledTask.Value
+        }
+#endregion
 
 ## Remove OneDrive 
-taskkill /f /im OneDrive.exe
+#taskkill /f /im OneDrive.exe
+$onedrive = get-process | where {$_.name -like "*onedrive*"}
+Stop-Process $onedrive
 & $env:SystemRoot\SysWOW64\OneDriveSetup.exe /uninstall
 
 New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
@@ -241,7 +250,7 @@ function add-registryKeys
             add-registryKeys -Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows" -Name "Windows" -Type "DWord" -Value 0
             .EXAMPLE
             This should be another example but instead I will state that brad-x sucks.
-            .PARAMETER Path
+            .PARAMETER registryPath
             Registry path to be modified
             .PARAMETER Name
             Name of the registry key
@@ -253,40 +262,36 @@ function add-registryKeys
         [CmdletBinding(DefaultParameterSetName="")]
         Param(
             [Parameter(
-                    Position=0,
                     ValueFromPipeline=$True,
                     ValueFromPipelineByPropertyName=$True
                     )]
                 [string[]]
-                [ValidateNotNullorEmpty]
+                [ValidateNotNullorEmpty()]
                 [ValidatePattern("HK[L|C][R|U|M]:\\\w")]
             $registryPath,
 
             [Parameter(
-                    Posotion=0,
                     ValueFromPipeline=$True,
                     ValueFromPipelineByPropertyName=$True
                     )]
                 [string[]]
-                [ValidateNotNullorEmpty]
+                [ValidateNotNullorEmpty()]
             $name,
 
             [Parameter(
-                    Position=0,
                     ValueFromPipeline=$True,
                     ValueFromPipelineByPropertyName=$True
                     )]
                 [string[]]
-                [ValidateNotNullorEmpty]
+                [ValidateNotNullorEmpty()]
             $type,
 
             [Parameter(
-                    Position=0,
                     ValueFromPipeline=$True,
                     ValueFromPipelineByPropertyName=$True
                     )]
                 [int[]]
-                [ValidateNotNullorEmpty]
+                [ValidateNotNull()]
             $value
         )
 
@@ -298,17 +303,17 @@ function add-registryKeys
 
         Process
             {
-                If (-Not (Test-Path $path))
+                If (-Not (Test-Path $registryPath))
                     {
 	                    try 
                             {
-                                New-Item -Force -Path $path | Out-Null
+                                New-Item -Force -Path $registryPath | Out-Null
                             }
                         catch {}
 
                         try
                             {
-                                New-ItemProperty -Force -Path $path -Name $name -Type $type -Value $value
+                                New-ItemProperty -Force -Path $registryPath -Name $name -Type $type -Value $value
                             }
                         catch {}
                     }
@@ -316,7 +321,7 @@ function add-registryKeys
                     {
                         try
                             {
-                                New-ItemProperty -Force -Path $path -Name $name -Type $type -Value $value
+                                New-ItemProperty -Force -Path $registryPath -Name $name -Type $type -Value $value
                             }
                         catch {}
                     }

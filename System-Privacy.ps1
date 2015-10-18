@@ -1,4 +1,95 @@
-﻿## Stop / Disable intrusive diagnostics services
+﻿function add-registryKeys 
+    {
+        <#
+            .SYNOPSIS
+            Add registry keys
+            .DESCRIPTION
+            This function will add registry keys
+            .EXAMPLE
+            add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows" -Name "Windows" -Type "DWord" -Value 0
+            .PARAMETER registryPath
+            Registry path to be modified
+            .PARAMETER Name
+            Name of the registry key
+            .PARAMETER Type
+            Type of registry key
+            .Parameter Value
+            Value of the registry key
+          #>
+        [CmdletBinding(DefaultParameterSetName="")]
+        Param(
+            [Parameter(
+                    ValueFromPipeline=$True,
+                    ValueFromPipelineByPropertyName=$True
+                    )]
+                [string]
+                [ValidateNotNullorEmpty()]
+                [ValidatePattern("HK[L|C][R|U|M]:\\\w")]
+            $registryPath,
+
+            [Parameter(
+                    ValueFromPipeline=$True,
+                    ValueFromPipelineByPropertyName=$True
+                    )]
+                [string]
+                [ValidateNotNullorEmpty()]
+            $name,
+
+            [Parameter(
+                    ValueFromPipeline=$True,
+                    ValueFromPipelineByPropertyName=$True
+                    )]
+                [string]
+                [ValidateNotNullorEmpty()]
+            $type,
+
+            [Parameter(
+                    ValueFromPipeline=$True,
+                    ValueFromPipelineByPropertyName=$True
+                    )]
+                [int]
+                [ValidateNotNull()]
+            $value
+        )
+
+
+        Begin
+            {
+                
+            }
+
+        Process
+            {
+                If (-Not (Test-Path $registryPath))
+                    {
+	                    try 
+                            {
+                                New-Item -Force -Path $registryPath | Out-Null
+                           }
+                        catch {}
+
+                        try
+                            {
+                                New-ItemProperty -Force -Path $registryPath -Name $name -PropertyType $type -Value $value | out-null
+                            }
+                        catch {}
+                    }
+                else
+                    {
+                        try
+                            {
+                                New-ItemProperty -Force -Path $registryPath -Name $name -PropertyType $type -Value $value | out-null
+                            }
+                        catch {}
+                    }
+            }
+        End
+            {
+                
+            }
+    }
+    
+## Stop / Disable intrusive diagnostics services
 $services = @("diagtrack"
 	"dmwappushservice"
 	"Wecsvc"
@@ -233,93 +324,4 @@ foreach ($modernApp in $modernApps) {
 
 
 
-function add-registryKeys 
-    {
-        <#
-            .SYNOPSIS
-            Add registry keys
-            .DESCRIPTION
-            This function will add registry keys
-            .EXAMPLE
-            add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows" -Name "Windows" -Type "DWord" -Value 0
-            .PARAMETER registryPath
-            Registry path to be modified
-            .PARAMETER Name
-            Name of the registry key
-            .PARAMETER Type
-            Type of registry key
-            .Parameter Value
-            Value of the registry key
-          #>
-        [CmdletBinding(DefaultParameterSetName="")]
-        Param(
-            [Parameter(
-                    ValueFromPipeline=$True,
-                    ValueFromPipelineByPropertyName=$True
-                    )]
-                [string]
-                [ValidateNotNullorEmpty()]
-                [ValidatePattern("HK[L|C][R|U|M]:\\\w")]
-            $registryPath,
 
-            [Parameter(
-                    ValueFromPipeline=$True,
-                    ValueFromPipelineByPropertyName=$True
-                    )]
-                [string]
-                [ValidateNotNullorEmpty()]
-            $name,
-
-            [Parameter(
-                    ValueFromPipeline=$True,
-                    ValueFromPipelineByPropertyName=$True
-                    )]
-                [string]
-                [ValidateNotNullorEmpty()]
-            $type,
-
-            [Parameter(
-                    ValueFromPipeline=$True,
-                    ValueFromPipelineByPropertyName=$True
-                    )]
-                [int]
-                [ValidateNotNull()]
-            $value
-        )
-
-
-        Begin
-            {
-                
-            }
-
-        Process
-            {
-                If (-Not (Test-Path $registryPath))
-                    {
-	                    try 
-                            {
-                                New-Item -Force -Path $registryPath | Out-Null
-                           }
-                        catch {}
-
-                        try
-                            {
-                                New-ItemProperty -Force -Path $registryPath -Name $name -PropertyType $type -Value $value | out-null
-                            }
-                        catch {}
-                    }
-                else
-                    {
-                        try
-                            {
-                                New-ItemProperty -Force -Path $registryPath -Name $name -PropertyType $type -Value $value | out-null
-                            }
-                        catch {}
-                    }
-            }
-        End
-            {
-                
-            }
-    }

@@ -127,119 +127,63 @@ Remove-Item -Path 'HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
 Remove-Item -Path 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
 
 ## Kill access to the Windows Store
-If (-Not (Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore")) {
-	New-Item -Force -Path "HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore -Name RemoveWindowsStore -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore -Name RemoveWindowsStore -Type DWord -Value 1
 
 ## Block connection to Microsoft Accounts
-If (-Not (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System")) {
-	New-Item -Force -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name NoConnectedUser -Type DWord -Value 3
+add-registryKeys -registryPath HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name NoConnectedUser -Type DWord -Value 3
 
 # Disable WiFi Sense
-If (-Not (Test-Path "HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting")) {
-	New-Item -Force -Path "HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting -Name value -Type DWord -Value 0
-If (-Not (Test-Path "HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots")) {
-	New-Item -Force -Path "HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots -Name value -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting -Name value -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots -Name value -Type DWord -Value 0
 
 # Disable Windows Update peer to peer
-If (-Not (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config")) {
-	New-Item -Force -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config -Name DODownloadMode -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config -Name DODownloadMode -Type DWord -Value 0
 
 # Require Ctrl-Alt-Del to log on
-If (-Not (Test-Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System")) {
-	New-Item -Force -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name DisableCAD -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name DisableCAD -Type DWord -Value 0
 
 # Block "Add features to Windows 10"
-If (-Not (Test-Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\WAU")) {
-	New-Item -Force -Path "HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\WAU" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\WAU -Name Disabled -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\WAU -Name Disabled -Type DWord -Value 1
 
 # Turn off Application Telemetry, Inventory Collector
-If (-Not (Test-Path "HKLM:\Software\Policies\Microsoft\Windows\AppCompat")) {
-	New-Item -Force -Path "HKLM:\Software\Policies\Microsoft\Windows\AppCompat" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\AppCompat -Name AITEnable -Type DWord -Value 0
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\AppCompat -Name DisableInventory -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\AppCompat -Name AITEnable -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\AppCompat -Name DisableInventory -Type DWord -Value 1
 
 # Do not allow a Windows app to share application data between users
-If (-Not (Test-Path "HKLM:\Software\Policies\Microsoft\Windows\CurrentVersion\AppModel\StateManager")) {
-	New-Item -Force -Path "HKLM:\Software\Policies\Microsoft\Windows\CurrentVersion\AppModel\StateManager" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\CurrentVersion\AppModel\StateManager -Name AllowSharedLocalAppData -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\CurrentVersion\AppModel\StateManager -Name AllowSharedLocalAppData -Type DWord -Value 0
 
 # Minimize Telemetry on Pro, disable on Enterprise
-If (-Not (Test-Path "HKLM:\Software\Policies\Microsoft\Windows\DataCollection")) {
-	New-Item -Force -Path "HKLM:\Software\Policies\Microsoft\Windows\DataCollection" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\DataCollection -Name AllowTelemetry -Type DWord -Value 0
 
 # Disable location services and device sensors
-If (-Not (Test-Path "HKLM:\Software\Policies\Microsoft\Windows\LocationAndSensors")) {
-	New-Item -Force -Path "HKLM:\Software\Policies\Microsoft\Windows\LocationAndSensors" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\LocationAndSensors -Name DisableLocation -Type DWord -Value 1
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\LocationAndSensors -Name DisableSensors -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\LocationAndSensors -Name DisableLocation -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\LocationAndSensors -Name DisableSensors -Type DWord -Value 1
 
 # Prevent the usage of OneDrive for file storage
-If (-Not (Test-Path "HKLM:\Software\Policies\Microsoft\Windows\OneDrive")) {
-	New-Item -Force -Path "HKLM:\Software\Policies\Microsoft\Windows\OneDrive" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\OneDrive -Name DisableFileSyncNGSC -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\OneDrive -Name DisableFileSyncNGSC -Type DWord -Value 1
 
 # Don't allow Microsoft to enable experimental features, Insider builds
-If (-Not (Test-Path "HKLM:\Software\Policies\Microsoft\Windows\PreviewBuilds")) {
-	New-Item -Force -Path "HKLM:\Software\Policies\Microsoft\Windows\PreviewBuilds" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\PreviewBuilds -Name EnableConfigFlighting -Type DWord -Value 0
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\PreviewBuilds -Name EnableExperimentation -Type DWord -Value 0
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\PreviewBuilds -Name AllowBuildPreview -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\PreviewBuilds -Name EnableConfigFlighting -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\PreviewBuilds -Name EnableExperimentation -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\PreviewBuilds -Name AllowBuildPreview -Type DWord -Value 0
 
 # Disable cloud sync of settings between PC's
-If (-Not (Test-Path "HKLM:\Software\Policies\Microsoft\Windows\SettingSync")) {
-	New-Item -Force -Path "HKLM:\Software\Policies\Microsoft\Windows\SettingSync" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\SettingSync -Name DisableSettingSync -Type DWord -Value 2
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\SettingSync -Name DisableSettingSyncUserOverride -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\SettingSync -Name DisableSettingSync -Type DWord -Value 2
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\SettingSync -Name DisableSettingSyncUserOverride -Type DWord -Value 1
 
 # Block Cortana
-If (-Not (Test-Path "HKLM:\Software\Policies\Microsoft\Windows\Windows Search")) {
-	New-Item -Force -Path "HKLM:\Software\Policies\Microsoft\Windows\Windows Search" | Out-Null
-}
-New-ItemProperty -Force -Path 'HKLM:\Software\Policies\Microsoft\Windows\Windows Search' -Name AllowCortana -Type DWord -Value 0
+add-registryKeys -registryPath 'HKLM:\Software\Policies\Microsoft\Windows\Windows Search' -Name AllowCortana -Type DWord -Value 0
 
 # Configure Automatic Updates - Don't interrupt users, but install / reboot every Friday
-If (-Not (Test-Path "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU")) {
-	New-Item -Force -Path "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU" | Out-Null
-}
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name NoAutoUpdate -Type DWord -Value 0
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name AUOptions -Type DWord -Value 4
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name AutomaticMaintenanceEnabled -Type DWord -Value 1
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name ScheduledInstallDay -Type DWord -Value 6
-New-ItemProperty -Force -Path HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name ScheduledInstallTime -Type DWord -Value 3
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name NoAutoUpdate -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name AUOptions -Type DWord -Value 4
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name AutomaticMaintenanceEnabled -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name ScheduledInstallDay -Type DWord -Value 6
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name ScheduledInstallTime -Type DWord -Value 3
 
 # Disable the Customer Experience Improvement Program
-If (-Not (Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient"))
-{
-    New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft" -Name SQMClient
-}
-If (-Not (Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows"))
-{
-    New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient" -Name Windows
-}
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows" -Name CEIPEnable -Type DWord -Value 0
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\SQMClient\Windows" -Name CEIPEnable -Type DWord -Value 0
+add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows" -Name CEIPEnable -Type DWord -Value 0
+add-registryKeys -registryPath "HKLM:\SOFTWARE\Microsoft\SQMClient\Windows" -Name CEIPEnable -Type DWord -Value 0
 
 # Disable Windows Defender Cloud reporting and sample submission
 

@@ -241,7 +241,7 @@ function add-registryKeys
             .DESCRIPTION
             This function will add registry keys
             .EXAMPLE
-            add-registryKeys -Path "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows" -Name "Windows" -Type "DWord" -Value 0
+            add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows" -Name "Windows" -Type "DWord" -Value 0
             .EXAMPLE
             This should be another example but instead I will state that brad-x sucks.
             .PARAMETER registryPath

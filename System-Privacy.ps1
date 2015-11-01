@@ -129,7 +129,7 @@ add-registryKeys -registryPath 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53
 #Remove-Item -Path 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
 
 ## Kill access to the Windows Store
-add-registryKeys -registryPath HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore -Name RemoveWindowsStore -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore -Name RemoveWindowsStore -Type DWord -Value 0
 
 ## Block connection to Microsoft Accounts
 add-registryKeys -registryPath HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System -Name NoConnectedUser -Type DWord -Value 3
@@ -142,7 +142,7 @@ add-registryKeys -registryPath HKLM:\Software\Microsoft\PolicyManager\default\Wi
 add-registryKeys -registryPath HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config -Name DODownloadMode -Type DWord -Value 0
 
 # Require Ctrl-Alt-Del to log on
-add-registryKeys -registryPath HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name DisableCAD -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name DisableCAD -Type DWord -Value 1
 
 # Block "Add features to Windows 10"
 add-registryKeys -registryPath HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\WAU -Name Disabled -Type DWord -Value 1

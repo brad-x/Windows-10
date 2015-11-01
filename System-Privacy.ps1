@@ -123,8 +123,10 @@ Stop-Process $onedrive
 & $env:SystemRoot\SysWOW64\OneDriveSetup.exe /uninstall
 
 New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
-Remove-Item -Path 'HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
-Remove-Item -Path 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
+add-registryKeys -registryPath 'HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Name System.IsPinnedToNameSpaceTree -Type DWord -Value 0
+add-registryKeys -registryPath 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Name System.IsPinnedToNameSpaceTree -Type DWord -Value 0
+#Remove-Item -Path 'HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
+#Remove-Item -Path 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
 
 ## Kill access to the Windows Store
 add-registryKeys -registryPath HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore -Name RemoveWindowsStore -Type DWord -Value 1

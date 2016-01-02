@@ -258,6 +258,15 @@ $modernApps = @("Microsoft.Reader"
 	"Microsoft.Office.OneNote"
 	"Microsoft.SkypeApp"
 	"Microsoft.MicrosoftOfficeHub"
+#	"Microsoft.CommsPhone"
+#	"Microsoft.ConnectivityStore"
+#	"Microsoft.Messaging"
+	"Microsoft.Office.Sway"
+	"9E2F88E3.Twitter"
+	"Flipboard.Flipboard"
+	"ShazamEntertainmentLtd.Shazam"
+	"king.com.CandyCrushSaga"
+	"ClearChannelRadioDigital.iHeartRadio"
 )
 
 foreach ($modernApp in $modernApps) {

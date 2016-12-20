@@ -187,6 +187,9 @@ add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\Windows
 add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\SQMClient\Windows" -Name CEIPEnable -Type DWord -Value 0
 add-registryKeys -registryPath "HKLM:\SOFTWARE\Microsoft\SQMClient\Windows" -Name CEIPEnable -Type DWord -Value 0
 
+# Disable Consumer Features like suggested apps
+add-registryKeys -registryPath "HKLM:\Software\Policies\Microsoft\Windows\CloudContent" -Name DisableWindowsConsumerFeatures -Type DWord -Value 1
+
 # Disable Windows Defender Cloud reporting and sample submission
 
 $definition = @"

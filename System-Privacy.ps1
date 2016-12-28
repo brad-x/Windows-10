@@ -114,10 +114,6 @@ Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Customer Experience Improvem
 Disable-ScheduledTask -TaskPath "\Microsoft\Windows\DiskDiagnostic" -TaskName "Microsoft-Windows-DiskDiagnosticDataCollector"  
 Disable-ScheduledTask -TaskPath "\Microsoft\Windows\NetTrace" -TaskName "GatherNetworkInfo"  
 Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Windows Error Reporting" -TaskName "QueueReporting"  
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\WindowsUpdate" -TaskName "Automatic App Update"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\WindowsUpdate" -TaskName "Scheduled Start"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\WindowsUpdate" -TaskName "sih"
-Disable-ScheduledTask -TaskPath "\Microsoft\Windows\WindowsUpdate" -TaskName "sihboot"
 
 ## Remove OneDrive 
 #taskkill /f /im OneDrive.exe

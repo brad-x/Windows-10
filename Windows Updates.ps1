@@ -1,8 +1,3 @@
-## ------------------------------------------------------------------
-## PowerShell Script To Automate Windows Update
-## Script should be executed with "Administrator" Privilege
-## ------------------------------------------------------------------
-
 $ErrorActionPreference = "SilentlyContinue"
 If ($Error) {
 	$Error.Clear()

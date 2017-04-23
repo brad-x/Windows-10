@@ -87,9 +87,6 @@ Else {
 Set-Service wuauserv -startupType Disabled
 stop-service wuauserv
 
-#Disable-ScheduledTask -TaskPath "\Microsoft\Windows\WindowsUpdate" -TaskName "Automatic App Update"
-#Disable-ScheduledTask -TaskPath "\Microsoft\Windows\WindowsUpdate" -TaskName "Scheduled Start"
-#Disable-ScheduledTask -TaskPath "\Microsoft\Windows\WindowsUpdate" -TaskName "sih"
-#Disable-ScheduledTask -TaskPath "\Microsoft\Windows\WindowsUpdate" -TaskName "sihboot"
+Get-ScheduledTask -TaskPath "\Microsoft\Windows\WindowsUpdate\" | Disable-ScheduledTask
 
-Get-ScheduledTask -TaskPath "\Microsoft\Windows\WindowsUpdate" | Disable-ScheduledTask
+Get-ScheduledTask -TaskPath "\Microsoft\Windows\UpdateOrchestrator\" | Disable-ScheduledTask

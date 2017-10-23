@@ -189,6 +189,9 @@ add-registryKeys -registryPath "HKLM:\SOFTWARE\Microsoft\SQMClient\Windows" -Nam
 # Disable Consumer Features like suggested apps
 add-registryKeys -registryPath "HKLM:\Software\Policies\Microsoft\Windows\CloudContent" -Name DisableWindowsConsumerFeatures -Type DWord -Value 1
 
+# Disable Steps Recorder
+add-registryJeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat" -Name "DisableUAR" -Type DWord -Value 1
+
 # Disable Windows Defender Cloud reporting and sample submission
 
 $definition = @"

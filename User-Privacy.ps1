@@ -26,6 +26,7 @@ If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization")) {
 }
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\InputPersonalization -Name RestrictImplicitInkCollection -Type DWord -Value 1
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\InputPersonalization -Name RestrictImplicitTextCollection -Type DWord -Value 1
+
 If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\Input\TIPC")) {
 	New-Item -Force -Path "HKCU:\SOFTWARE\Microsoft\Input\TIPC" | Out-Null
 }

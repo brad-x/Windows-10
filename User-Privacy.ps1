@@ -7,16 +7,19 @@ If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\Personalization\Settings")) {
         New-Item -Force -Path "HKCU:\SOFTWARE\Microsoft\Personalization\Settings" | Out-Null
 }
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Personalization\Settings -Name AcceptedPrivacyPolicy -Type DWord -Value 0
+
 # Start Menu: Disable Bing Search Results
 If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search")) {
         New-Item -Force -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" | Out-Null
 }
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search -Name BingSearchEnabled -Type DWord -Value 0
+
 # Do not collect Contact information
 If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore")) {
         New-Item -Force -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore" | Out-Null
 }
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\InputPersonalization\TrainedDataStore -Name HarvestContacts -Type DWord -Value 0
+
 # Do not collect writing and text input data
 If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization")) {
         New-Item -Force -Path "HKCU:\SOFTWARE\Microsoft\InputPersonalization" | Out-Null
@@ -27,9 +30,6 @@ If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\Input\TIPC")) {
 	New-Item -Force -Path "HKCU:\SOFTWARE\Microsoft\Input\TIPC" | Out-Null
 }
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Input\TIPC -Name Enabled -Type DWord -Value 0
-
-# Disable location sensor
-#New-ItemProperty -Force -Path "HKCU:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Sensor\Permissions\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}" -Name SensorPermissionState -Type DWord -Value 0
 
 # Disable collection of language data from the environment via the browser
 If (-Not (Test-Path "HKCU:\Control Panel\International\User Profile")) {
@@ -96,10 +96,6 @@ New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Ex
 
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name Hidden -Type DWord -Value 1
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name HideFileExt -Type DWord -Value 0
-
-# Don't show recent/frequent items in quick access
-New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name ShowRecent -Type DWord -Value 0
-New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name ShowFrequent -Type DWord -Value 0
 
 # Lock Screen: Turn off Spotlight
 New-ItemProperty -Force -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Lock Screen\Creative" -Name LockImageFlags -Type DWord -Value 0

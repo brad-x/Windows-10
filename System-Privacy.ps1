@@ -1,4 +1,4 @@
-﻿function add-registryKeys 
+function add-registryKeys 
     {
         <#
             .SYNOPSIS
@@ -127,7 +127,7 @@ add-registryKeys -registryPath 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53
 #Remove-Item -Path 'HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
 #Remove-Item -Path 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
 
-## Kill access to the Windows Store
+## Kill access to the Windows Store (Optional)
 add-registryKeys -registryPath HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore -Name RemoveWindowsStore -Type DWord -Value 0
 
 ## Block connection to Microsoft Accounts
@@ -137,14 +137,14 @@ add-registryKeys -registryPath HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\P
 add-registryKeys -registryPath HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting -Name value -Type DWord -Value 0
 add-registryKeys -registryPath HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots -Name value -Type DWord -Value 0
 
-# Disable Windows Update peer to peer
-add-registryKeys -registryPath HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config -Name DODownloadMode -Type DWord -Value 0
+# Disable Windows Update peer to peer over WAN
+add-registryKeys -registryPath HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config -Name DODownloadMode -Type DWord -Value 1
 
 # Require Ctrl-Alt-Del to log on
 add-registryKeys -registryPath HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name DisableCAD -Type DWord -Value 1
 
 # Block "Add features to Windows 10"
-add-registryKeys -registryPath HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\WAU -Name Disabled -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\WAU -Name Disabled -Type DWord -Value 0
 
 # Turn off Application Telemetry, Inventory Collector
 add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\AppCompat -Name AITEnable -Type DWord -Value 0
@@ -190,7 +190,7 @@ add-registryKeys -registryPath "HKLM:\SOFTWARE\Microsoft\SQMClient\Windows" -Nam
 add-registryKeys -registryPath "HKLM:\Software\Policies\Microsoft\Windows\CloudContent" -Name DisableWindowsConsumerFeatures -Type DWord -Value 1
 
 # Disable Steps Recorder
-add-registryJeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat" -Name "DisableUAR" -Type DWord -Value 1
+add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat" -Name "DisableUAR" -Type DWord -Value 1
 
 # Disable Windows Defender Cloud reporting and sample submission
 
@@ -258,7 +258,7 @@ $modernApps = @("Microsoft.Reader"
 #	"Microsoft.WindowsSoundRecorder"
 	"Microsoft.XboxApp"
 #	"Microsoft.WindowsCamera"
-	"Microsoft.ZuneMusic"
+#	"Microsoft.ZuneMusic"
 #	"Microsoft.ZuneVideo"
 	"Microsoft.Office.OneNote"
 #	"Microsoft.SkypeApp"
@@ -273,32 +273,6 @@ $modernApps = @("Microsoft.Reader"
         "Microsoft.OneConnect"
 #       "Microsoft.WindowsFeedbackHub"
         "Microsoft.MinecraftUWP"
-#       "9E2F88E3.Twitter"
-#       "PandoraMediaInc.29680B314EFC2"
-#       "Flipboard.Flipboard"
-#       "ShazamEntertainmentLtd.Shazam"
-#       "king.com.*"
-#       "ClearChannelRadioDigital.iHeartRadio"
-#       "4DF9E0F8.Netflix"
-#       "6Wunderkinder.Wunderlist"
-#       "Drawboard.DrawboardPDF"
-#       "2FE3CB00.PicsArt-PhotoStudio"
-#       "D52A8D61.FarmVille2CountryEscape"
-#       "TuneIn.TuneInRadio"
-#       "GAMELOFTSA.Asphalt8Airborne"
-#       "TheNewYorkTimes.NYTCrossword"
-#       "DB6EA5DB.CyberLinkMediaSuiteEssentials"
-#       "Facebook.Facebook"
-#	"flaregamesGmbH.RoyalRevolt2"
-#	"Microsoft.Office.Sway"
-#	"9E2F88E3.Twitter"
-#	"Flipboard.Flipboard"
-#	"ShazamEntertainmentLtd.Shazam"
-#	"king.com.CandyCrushSaga"
-#	"ClearChannelRadioDigital.iHeartRadio"
-#	"AdobeSystemsIncorporated.AdobePhotoshopExpress"
-#	"ActiproSoftwareLLC.562882FEEB491"
-#	"D5EA27B7.Duolingo-LearnLanguagesforFree"	
 )
 
 
@@ -312,7 +286,7 @@ foreach ($modernApp in $modernApps) {
     Get-AppxPackage -Name $modernApp -AllUsers | Remove-AppxPackage
 }
 
-## Pass 2: Remove everything else
+## Pass 2 (Optional): Remove everything else
 
 #Get-AppxPackage -AllUsers | where-object {$_.name –notlike “Microsoft*”} | Remove-AppxPackage
 #Get-AppXProvisionedPackage –online | where-object {$_.packagename –notlike “*Microsoft*”} | Remove-AppxProvisionedPackage –online

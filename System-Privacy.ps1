@@ -139,7 +139,7 @@ add-registryKeys -registryPath HKLM:\Software\Microsoft\PolicyManager\default\Wi
 
 # Disable Windows Update peer to peer over WAN
 add-registryKeys -registryPath HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config -Name DODownloadMode -Type DWord -Value 1
-add-registryKeys -registryPath HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization -Name SystemSettingsDownloadMode -Type DWord -Value 0
+add-registryKeys -registryPath HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization -Name SystemSettingsDownloadMode -Type DWord -Value 3
 
 # Require Ctrl-Alt-Del to log on
 add-registryKeys -registryPath HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name DisableCAD -Type DWord -Value 1
@@ -197,8 +197,8 @@ add-registryKeys -registryPath "HKLM:\Software\Policies\Microsoft\Windows\CloudC
 add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat" -Name "DisableUAR" -Type DWord -Value 1
 
 # Disable WiFI Sense
-add-registryKeys -registryPath "HKLM:\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting" -Name "value" -Type DWord -Value 0
-add-registryKeys -registryPath "HKLM:\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots" -Name "value" -Type DWord -Value 0
+add-registryKeys -registryPath "HKLM:\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting" -Name value -Type DWord -Value 0
+add-registryKeys -registryPath "HKLM:\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots" -Name value -Type DWord -Value 0
 
 # Disable Web Search
 add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name "DisableWebSearch" -Type DWord -Value 1

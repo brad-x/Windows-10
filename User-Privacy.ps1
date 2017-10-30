@@ -76,6 +76,9 @@ If (-Not (Test-Path "$Edge\User\Default\SearchScopes")) {
 New-ItemProperty -Force -Path "$Edge\User\Default\SearchScopes" -Name ShowSearchSuggestionsGlobal -Value 0
 
 # 0 disables PagePrediction, 1 enables them
+If (-Not (Test-Path "$Edge\FlipAhead")) {
+	New-Item -Force -Path "$Edge\FlipAhead" | Out-Null
+}
 New-ItemProperty -Force -Path "$Edge\FlipAhead" -Name FPEnabled -Value 0
 
 # 0 disables PhishingFilter, 1 enables it
@@ -130,4 +133,7 @@ Remove-Item -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDelive
 New-ItemProperty -Force -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" -Name "GlobalUserDisabled" -Type DWord -Value 1
 
 # Disable Apps use advertising ID
+If (-Not (Test-Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo")) {
+	New-Item -Force -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" | Out-Null
+}
 New-ItemProperty -Force -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Type DWord -Value 0

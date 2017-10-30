@@ -96,7 +96,7 @@ New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Ex
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name ShowFrequent -Type DWord -Value 0
 # Change Explorer home screen back to This PC
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name LaunchTo -Type DWord -Value 1
-
+# Show Hidden files and file extensions for known types
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name Hidden -Type DWord -Value 1
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced -Name HideFileExt -Type DWord -Value 0
 

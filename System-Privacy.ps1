@@ -95,6 +95,8 @@ $services = @("diagtrack"
 	"Wecsvc"
 	"DcpSvc"
 	"diagnosticshub.standardcollector.service"
+	"OneSyncSvc"
+	"OneSyncSvc_Session1"
 )
 
 foreach ($service in $services) {
@@ -124,8 +126,6 @@ Stop-Process $onedrive
 New-PSDrive -Name HKCR -PSProvider Registry -Root HKEY_CLASSES_ROOT
 add-registryKeys -registryPath 'HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Name System.IsPinnedToNameSpaceTree -Type DWord -Value 0
 add-registryKeys -registryPath 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Name System.IsPinnedToNameSpaceTree -Type DWord -Value 0
-#Remove-Item -Path 'HKCR:\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
-#Remove-Item -Path 'HKCR:\Wow6432Node\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}' -Recurse
 
 ## Kill access to the Windows Store (Optional)
 add-registryKeys -registryPath HKLM:\SOFTWARE\Policies\Microsoft\WindowsStore -Name RemoveWindowsStore -Type DWord -Value 0
@@ -139,6 +139,7 @@ add-registryKeys -registryPath HKLM:\Software\Microsoft\PolicyManager\default\Wi
 
 # Disable Windows Update peer to peer over WAN
 add-registryKeys -registryPath HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config -Name DODownloadMode -Type DWord -Value 1
+add-registryKeys -registryPath HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config -Name SystemSettingsDownloadMode -Type DWord -Value 0
 
 # Require Ctrl-Alt-Del to log on
 add-registryKeys -registryPath HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name DisableCAD -Type DWord -Value 1
@@ -159,9 +160,13 @@ add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\DataCol
 # Disable location services and device sensors
 add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\LocationAndSensors -Name DisableLocation -Type DWord -Value 1
 add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\LocationAndSensors -Name DisableSensors -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\Personalization -Name NoLockScreenCamera -Type DWord -Value 1
+
 
 # Prevent the usage of OneDrive for file storage
 add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\OneDrive -Name DisableFileSyncNGSC -Type DWord -Value 1
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\OneDrive -Name DisableLocation -Type DWord -Value 1
+
 
 # Don't allow Microsoft to enable experimental features, Insider builds
 add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\PreviewBuilds -Name EnableConfigFlighting -Type DWord -Value 0
@@ -173,7 +178,8 @@ add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\Setting
 add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\SettingSync -Name DisableSettingSyncUserOverride -Type DWord -Value 1
 
 # Block Cortana
-add-registryKeys -registryPath 'HKLM:\Software\Policies\Microsoft\Windows\Windows Search' -Name AllowCortana -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\Windows Search -Name AllowCortana -Type DWord -Value 0
+add-registryKeys -registryPath HKLM:\Software\Microsoft\PolicyManager\default\Experience\AllowCortana -Name value -Type DWord -Value 0
 
 # Configure Automatic Updates - Don't interrupt users, but install / reboot every Friday
 add-registryKeys -registryPath HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU -Name NoAutoUpdate -Type DWord -Value 0
@@ -192,8 +198,16 @@ add-registryKeys -registryPath "HKLM:\Software\Policies\Microsoft\Windows\CloudC
 # Disable Steps Recorder
 add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\Windows\AppCompat" -Name "DisableUAR" -Type DWord -Value 1
 
-# Disable Windows Defender Cloud reporting and sample submission
+# Disable WiFI Sense
+add-registryKeys -registryPath "HKLM:\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowWifiHotSpotReporting" -Name "value" -Type DWord -Value 0
+add-registryKeys -registryPath "HKLM:\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots" -Name "Value" -Type DWord -Value 0
 
+# Disable Web Search
+add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name "DisableWebSearch" -Type DWord -Value 1
+add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name "ConnectedSearchUseWeb" -Type DWord -Value 0
+add-registryKeys -registryPath "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name "ConnectedSearchUseWebOverMeteredConnections" -Type DWord -Value 0
+
+# Disable Windows Defender Cloud reporting and sample submission
 $definition = @"
 using System;
 using System.Runtime.InteropServices;

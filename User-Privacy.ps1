@@ -43,53 +43,6 @@ If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost")) 
 }
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost -Name EnableWebContentEvaluation -Type DWord -Value 0
 
-# Deny Device Access
-#If (-Not (Test-Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\LooselyCoupled")) {
-#        New-Item -Force -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\LooselyCoupled" | Out-Null
-#}
-#New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\LooselyCoupled -Name Type -Value LooselyCoupled
-#New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\LooselyCoupled -Name Value -Value Deny
-#New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\LooselyCoupled -Name InitialAppValue -Value Unspecified
-#
-#foreach ($key in (ls "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global")) {
-#    if ($key.PSChildName -EQ "LooselyCoupled") {
-#        continue
-#    }
-#    Set-ItemProperty -Path ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\" + $key.PSChildName) -Name "Type" -Value "InterfaceClass"
-#    Set-ItemProperty -Path ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\" + $key.PSChildName) -Name "Value" -Value "Deny"
-#    Set-ItemProperty -Path ("HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeviceAccess\Global\" + $key.PSChildName) -Name "InitialAppValue" -Value "Unspecified"
-#}
-
-##########
-
-If (-Not (Test-Path "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge")) {
-        New-Item -Force -Path "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge" | Out-Null
-}
-$Edge = "HKCU:\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppContainer\Storage\microsoft.microsoftedge_8wekyb3d8bbwe\MicrosoftEdge"
-
-# 1 adds the Do Not Track Header, 0 does not
-New-ItemProperty -Force -Path "$Edge\Main" -Name DoNotTrack -Value 1
-
-# 0 disables search suggestions, 1 does not
-If (-Not (Test-Path "$Edge\User\Default\SearchScopes")) {
-	New-Item -Force -Path "$Edge\User\Default\SearchScopes" | Out-Null
-}
-New-ItemProperty -Force -Path "$Edge\User\Default\SearchScopes" -Name ShowSearchSuggestionsGlobal -Value 0
-
-# 0 disables PagePrediction, 1 enables them
-If (-Not (Test-Path "$Edge\FlipAhead")) {
-	New-Item -Force -Path "$Edge\FlipAhead" | Out-Null
-}
-New-ItemProperty -Force -Path "$Edge\FlipAhead" -Name FPEnabled -Value 0
-
-# 0 disables PhishingFilter, 1 enables it
-New-ItemProperty -Force -Path "$Edge\PhishingFilter" -Name EnabledV9 -Value 0
-
-New-ItemProperty -Force -Path "$Edge\Main" -Name "FormSuggest Passwords" -Value no
-New-ItemProperty -Force -Path "$Edge\Main" -Name "Use FormSuggest" -Value no
-
-##########
-
 ## Explorer customizations
 # Disable Quick Access: Recent Files
 New-ItemProperty -Force -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer -Name ShowRecent -Type DWord -Value 0

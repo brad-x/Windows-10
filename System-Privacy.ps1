@@ -304,7 +304,7 @@ foreach ($modernApp in $modernApps) {
 
 ## Pass 2 (Optional): Remove everything else
 
-#Get-AppxPackage -AllUsers | where-object {$_.name –notlike “Microsoft*”} | Remove-AppxPackage
-#Get-AppXProvisionedPackage –online | where-object {$_.packagename –notlike “*Microsoft*”} | Remove-AppxProvisionedPackage –online
+#Get-AppxPackage -AllUsers | where-object {$_.name -notlike "*Microsoft*"} | Remove-AppxPackage
+#Get-AppXProvisionedPackage -online | where-object {$_.packagename -notlike "*Microsoft*"} | Remove-AppxProvisionedPackage -online
 
 
